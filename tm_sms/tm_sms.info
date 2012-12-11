@@ -1,0 +1,5 @@
+name = "TeleMo SMS"
+description = "Enables the broadcasting and receiving of text messages via TeleMo's cross-platform interface."
+dependencies[] = telemo
+package = TeleMo
+core = 6.x

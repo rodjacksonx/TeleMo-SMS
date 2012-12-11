@@ -1,0 +1,19 @@
+HOW-TO: INSTRUCTIONS FOR USING TELEMO SMS
+
+This module is designed for use with version 6.x of Drupal, and the TeleMo general telephony module. It allows your website to send and receive SMS messages using TeleMo's cross-platform interface, currently working with CallFire and Twilio.
+
+THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+To use this module:
+
+(1) Ensure you have the proper versions of Drupal (6.x).
+
+(2) Sign up for an account with CallFire, at https://callfire.com, or with Twilio, at https://twilio.com. Be sure to read all provided information thoroughly, and to understand the fees that will be charged.
+
+(3) Install and enable the TeleMo module. Follow the HOWTO for that module to finish it's setup before installing this module. <unfinished>.
+
+(4) Place the folder 'tm_sms' into your Drupal modules folder on your server. <unfinished>.
+
+(5) Enable the TeleMo SMS module.<unfinished>.
+
+(6) Configure the module settings; this will include enabling the SMS service within the settings forms. As an administrator on your website, you can navigate to 'Site configuration' -> 'TeleMo' -> 'Services' to access the SMS settings. The settings have descriptions to let you know what they are for, and whether or not to set them. <unfinished>.

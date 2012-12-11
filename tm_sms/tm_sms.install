@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ *   tm_sms.install
+ *
+ * Installation file for the TeleMo SMS module
+ */
+
+
+/**
+ * Implementation of hook_schema().
+ */
+/*function tm_sms_schema() {
+
+  $schema = array();
+  
+  return $schema;
+}
+*/
+
+
+/**
+ * Implementation of hook_install().
+ *
+ * Installs the TeleMo SMS module; particularly, installs the database schema
+ */
+function tm_sms_install() {
+  // Set the module weight so it can override other modules.
+  db_query("UPDATE {system} SET weight = 99 WHERE name = 'tm_sms'");
+  // install the schema for the database
+  //drupal_install_schema('tm_sms');
+}
+
+
+/**
+ * Implementation of hook_uninstall()
+ *
+ * Uninstalls the TeleMo SMS module.
+ */
+function tm_sms_uninstall() {
+  // Remove the schema
+  //drupal_uninstall_schema('tm_sms');
+	// Remove relevant data from the DB
+  db_query("DELETE FROM {variable} WHERE name LIKE 'tm_sms_%%'");
+}

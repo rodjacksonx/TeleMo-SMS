@@ -1,0 +1,17 @@
+©2012 Warehouse Guitar Speakers.
+
+   ----------
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+   ----------
+
+WARNING: This code is currently ALPHA. It has not yet been tested, and will have bugs, errors, and other issues. Use at this point is not recommended!
+
+   ----------
+
+TELEMO SMS is a telephony module intended for use with version 6.x of Drupal, with the core TeleMo telephony module, and (optionally) with version 2.x of Ubercart.
+
+This module simplifies access to various business APIs (currently CallFire and Twilio) to use their telephony services. This module specifically focuses on the SMS portions of their APIs, allowing both manual and automated sending of text messages, as well as responding to incoming text messages. 
