@@ -282,7 +282,7 @@ function tm_sms_telemo_notify($xml, $carrier) {
 	} // end of check if SMS service is enabled & $xml is valid
 	
 	// while we're here, do the next scheduled sends
-	telemo_execute_next_scheduled_sends();
+	telemo_execute_next_scheduled_actions();
 
 	return $ret;
 } // end function - ts_sms_telemo_notify
@@ -391,7 +391,7 @@ function ts_sms_ts_sms_features() {
 		'id' => 'stop',
 		'name' => 'Stop SMS sends',
 		'text' => 'Stops either the latest SMS feature sent to the user, or all of them.',
-		'filename' => 'cf_sms.response.inc',
+		'filename' => 'tm_sms.features.inc',
 		'codewords' => array('STOP'),
 		'enabled' => variable_get('cf_sms_response_feature_stop_enabled', FALSE),
 		'optin' => FALSE,
