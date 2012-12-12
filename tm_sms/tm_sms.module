@@ -9,7 +9,7 @@
  */
  
 
-require_once("tm_sms.notify.inc");
+//require_once("tm_sms.notify.inc");
 
 define('TM_SMS_SIGNUP_PROMPT_SETTING', "Please choose which text messaging features you would like to receive.");
 define('TM_SMS_DEFAULT_SHIP_MESSAGE', "!name, your !org order (for !total) has shipped. Your tracking number is !track");
@@ -23,7 +23,7 @@ define('TM_SMS_DEFAULT_HELP_MESSAGE', "Text NEW for the latest info or promo, SI
 // CODE BLOCK: _include_all_tm_sms_files
 
 	// get the features
-	$all_features = _tm_sms_all_features();
+	$all_features = tm_sms_all_features();
 	
 	// get the callback filenames of enabled features
 	$feature_fns = array();
@@ -95,7 +95,7 @@ function tm_sms_settings() {
 		'#type' => 'fieldset',
 		'#title' => t('Individual SMS feature settings'),
 		'#collapsible' => TRUE,
-		'#collapsed' => FALSE,
+		'#collapsed' => TRUE,
 	);
 
 	$feature_settings = tm_sms_feature_settings();
@@ -143,7 +143,7 @@ function tm_sms_telemo_service() {
 		'enabled' => variable_get('tm_sms_enabled', FALSE),
 		'prompt' => array(
 			'#type' => 'item',
-			'#value' => variable_get('tm_sms_signup_message', TM_SMS_SIGNUP_PROMPT_SETTING); //t('Choose the text messaging features you would like to signup for.'),
+			'#value' => variable_get('tm_sms_signup_message', TM_SMS_SIGNUP_PROMPT_SETTING),
 		),
 		'settings' => tm_sms_settings(),
 		'features' => tm_sms_all_features(),
@@ -302,13 +302,20 @@ function tm_sms_feature_settings() {
 		$feature_id = $feature['id'];
 		$feature_id_long = 'tm_sms_feature_' . $feature_id;
 		$feature_id_enabled = $feature_id_long . '_enabled';
+		$optin = $feature['optin'] ? 'opt-in' : 'response';
+		$settings[$feature_id_long] = array(
+			'#type' => 'fieldset',
+			'#title' => t('!id feature settings (!optin)', array('!id' => strtoupper($feature_id), '!optin' => $optin)),
+			'#collapsible' => FALSE,
+			'#collapsed' => FALSE,
+		);
 		$settings[$feature_id_long][$feature_id_enabled] = array(
 			'#type' => 'checkbox',
-			'#title' => '<b>' . $feature['name'] . ':</b> ' . $feature['text'],
+			'#title' => 'Enable <strong>' . strtoupper($feature['id']) . '</strong>: ' . $feature['text'],
 			'#default_value' => $feature['enabled'],
 		);
 		foreach ($feature['settings'] as $setting_name => $setting) {
-			$full_setting_name = 'tm_sms_feature_' . $feature_id . '_' . $setting_name;
+			$full_setting_name = $feature_id_long . '_' . $setting_name;
 			$settings[$feature_id_long][$full_setting_name] = $setting;
 		}
 	}
@@ -395,7 +402,7 @@ function ts_sms_ts_sms_features() {
 	$features[] = array(
 		'id' => 'help',
 		'name' => 'Get SMS help',
-		'text' => 'Receive an SMS with details on using the features or getting more info.',
+		'text' => 'Replies with an SMS with details on using the features or getting more info.',
 		'filename' => 'tm_sms.features.inc',
 		'codewords' => array('HELP', '?'),
 		'enabled' => variable_get('tm_sms_feature_help_enabled', FALSE),
@@ -417,7 +424,7 @@ function ts_sms_ts_sms_features() {
 	$features[] = array(
 		'id' => 'new',
 		'name' => 'Receive newest SMS',
-		'text' => 'Receive an SMS of the latest promo or info without signing up.',
+		'text' => 'Replies with an SMS of the latest promo or info without signing up.',
 		'filename' => 'tm_sms.features.inc',
 		'codewords' => array('NEW', 'NEWEST', 'LATEST'),
 		'enabled' => variable_get('tm_sms_feature_new_enabled', FALSE),

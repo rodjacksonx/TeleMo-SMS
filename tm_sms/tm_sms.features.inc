@@ -36,7 +36,7 @@ function tm_sms_feature_promos($message) { // the 'from_num' and 'data' params a
 			// check for errors; if none, record the details
 			if (is_array($ids)) {
 				db_query("INSERT INTO {telemo_actions} (id, message, timestamp, feature_id) VALUES ('%s', '%s', %d, '%s')", $ids[0], $message, $timestamp, 'promos');
-				db_query("INSERT INTO {telemo_action_numbers} (send_id, user_id, number) VALUES ('%s', %d, '%s')", $ids[0], $signup['id'], $num);
+				db_query("INSERT INTO {telemo_action_numbers} (action_id, user_id, number) VALUES ('%s', %d, '%s')", $ids[0], $signup['id'], $num);
 				db_query("UPDATE {telemo_users} SET last_action_time = %d, last_action_event = 'promos' WHERE id = %d", $timestamp, $signup['id']);
 			}
 		}
@@ -71,7 +71,7 @@ function tm_sms_feature_info($message) { // the 'from_num' and 'data' params are
 			// check for errors; if none, record the details
 			if (is_array($ids)) {
 				db_query("INSERT INTO {telemo_actions} (id, message, timestamp, feature_id) VALUES ('%s', '%s', %d, '%s')", $ids[0], $message, $timestamp, 'info');
-				db_query("INSERT INTO {telemo_action_numbers} (send_id, user_id, number) VALUES ('%s', %d, '%s')", $ids[0], $signup['id'], $num);
+				db_query("INSERT INTO {telemo_action_numbers} (action_id, user_id, number) VALUES ('%s', %d, '%s')", $ids[0], $signup['id'], $num);
 				db_query("UPDATE {telemo_users} SET last_action_time = %d, last_action_event = 'info' WHERE id = %d", $timestamp, $signup['id']);
 			}
 		}
@@ -100,7 +100,7 @@ function tm_sms_feature_ship($message, $from_num, $data) {
 		// check for errors; if none, record the details
 		if (is_array($ids)) {
 			db_query("INSERT INTO {telemo_actions} (id, message, timestamp, feature_id, data) VALUES ('%s', '%s', %d, 'ship', '%s')", $ids[0], $message, $timestamp, $data);
-			db_query("INSERT INTO {telemo_action_numbers} (send_id, user_id, number) VALUES ('%s', %d, '%s')", $ids[0], $user_id, $mobile_num);
+			db_query("INSERT INTO {telemo_action_numbers} (action_id, user_id, number) VALUES ('%s', %d, '%s')", $ids[0], $user_id, $mobile_num);
 			db_query("UPDATE {telemo_users} SET last_action_time = %d, last_action_event = 'ship' WHERE id = %d", $timestamp, $user_id);
 		}
 	}
@@ -242,7 +242,7 @@ function tm_sms_feature_ship_check($form, &$form_state) {
 		// the mobile number and the user ID to send to
 		$data = 'order=' . $order_id . ':phone=' . $mobile_num . ':user=' . $user_id;
 		// store the future send
-		db_query("INSERT INTO {telemo_future_actions} (send_time, recurrence, feature_id, message, major_data) VALUES (%d, 'none', 'ship', '%s', '%s')", $t, $message, $data);
+		db_query("INSERT INTO {telemo_future_actions} (action_time, recurrence, feature_id, message, major_data) VALUES (%d, 'none', 'ship', '%s', '%s')", $t, $message, $data);
 		// if there were two records (one for the user, one for the order), get rid of the order record now
 		if ($id == -$order_id) {
 			db_query("DELETE FROM {telemo_users} WHERE id = %d", -$order_id);
@@ -254,7 +254,7 @@ function tm_sms_feature_ship_check($form, &$form_state) {
 	db_query("DELETE FROM {telemo_users} WHERE id < 0 AND creation < %d", $t_minus_two_weeks);
 	
 	// execute all pending sends (including this one, if created)
-	telemo_execute_next_scheduled_sends();
+	telemo_execute_next_scheduled_actions();
 	
 } // end function - tm_sms_feature_ship_check
 
@@ -347,7 +347,7 @@ function tm_sms_feature_ship_check($form, &$form_state) {
 			// create and store a record of the send
 			db_query("INSERT INTO {telemo_actions} (id, message, timestamp, feature_id) VALUES (%d, '%s', %d, 'stop', '%s')", $ids[0], $message, $timestamp);
 			// record the user and the number we sent to
-			db_query("INSERT INTO {telemo_action_numbers} (send_id, user_id, number) VALUES (%d, %d, '%s')", $ids[0], $user_id, $from);
+			db_query("INSERT INTO {telemo_action_numbers} (action_id, user_id, number) VALUES (%d, %d, '%s')", $ids[0], $user_id, $from);
 		}
 	}
 	
@@ -435,16 +435,15 @@ function uc_checkout_pane_tm_sms($op, &$arg1, $arg2) {
 			);
     
 			// loop through all SMS features
-	    $all_features = _tm_sms_all_features();
+	    $all_features = tm_sms_all_features();
    		foreach ($all_features as $feature) {
 
 				// if the feature is enabled & an opt-in feature, add it to the form
 				$feature_id = $feature['id'];
-  		  $feature_id_enabled = 'tm_sms_feature_' . $feature_id . '_enabled';
-				if (variable_get($feature_id_enabled, 0) && $feature['optin']) {
+				if ($feature['enabled'] && $feature['optin']) {
 	  		  $tagged_feature_id = ':sms~' . $feature_id . ';';
 	  		  $feature_id_signedup = 'tm_sms_feature_' . $feature_id . '_signedup';
-					$pos = strpos($user_features, $tagged_feature_id);
+					$pos = strpos($user_signups, $tagged_feature_id);
 					$contents[$feature_id_signedup] = array(
 						'#type' => 'checkbox',
 						'#title' => '<strong>' . $feature['name'] . ':</strong> ' . $feature['text'],
