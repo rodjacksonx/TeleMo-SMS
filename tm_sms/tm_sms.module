@@ -331,7 +331,7 @@ function tm_sms_feature_settings() {
  */
 function tm_sms_all_features() {
 
-	$features = module_invoke_all('ts_sms_features');
+	$features = module_invoke_all('tm_sms_features');
 	
 	return $features;
 }
@@ -340,7 +340,7 @@ function tm_sms_all_features() {
 /**
  * Return the default, built-in features as an array
  */
-function ts_sms_ts_sms_features() {
+function tm_sms_tm_sms_features() {
 
 	$features = array();
 	
