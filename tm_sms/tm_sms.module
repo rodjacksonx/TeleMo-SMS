@@ -352,7 +352,6 @@ function tm_sms_tm_sms_features() {
 		'filename' => 'tm_sms.features.inc',
 		'enabled' => variable_get('tm_sms_feature_ship_enabled', FALSE),
 		'optin' => TRUE,
-		'admin-page' => FALSE,
 		'admin-form' => '',
 		'settings' => array(
 			'message' => array(
@@ -374,7 +373,6 @@ function tm_sms_tm_sms_features() {
 		'filename' => 'tm_sms.features.inc',
 		'enabled' => variable_get('tm_sms_feature_promos_enabled', FALSE),
 		'optin' => TRUE,
-		'admin-page' => TRUE,
 		'admin-form' => '',
 		'settings' => array(),
 	);
@@ -387,7 +385,6 @@ function tm_sms_tm_sms_features() {
 		'filename' => 'tm_sms.features.inc',
 		'enabled' => variable_get('tm_sms_feature_info_enabled', FALSE),
 		'optin' => TRUE,
-		'admin-page' => TRUE,
 		'admin-form' => '',
 		'settings' => array(),
 	);
@@ -401,7 +398,6 @@ function tm_sms_tm_sms_features() {
 		'codewords' => array('STOP'),
 		'enabled' => variable_get('cf_sms_response_feature_stop_enabled', FALSE),
 		'optin' => FALSE,
-		'admin-page' => FALSE,
 		'admin-form' => '',
 		'settings' => array(),
 	);*/
@@ -415,7 +411,6 @@ function tm_sms_tm_sms_features() {
 		'codewords' => array('HELP', '?'),
 		'enabled' => variable_get('tm_sms_feature_help_enabled', FALSE),
 		'optin' => FALSE,
-		'admin-page' => FALSE,
 		'admin-form' => '',
 		'settings' => array(
 			'message' => array(
@@ -439,7 +434,6 @@ function tm_sms_tm_sms_features() {
 		'codewords' => array('NEW', 'NEWEST', 'LATEST'),
 		'enabled' => variable_get('tm_sms_feature_new_enabled', FALSE),
 		'optin' => FALSE,
-		'admin-page' => FALSE,
 		'admin-form' => '',
 		'settings' => array(
 			'time_limit' => array(
@@ -469,7 +463,6 @@ function tm_sms_tm_sms_features() {
 		'codewords' => array('DAMAGE', 'DAMAGED', 'DAMAGES'),
 		'enabled' => variable_get('tm_sms_feature_damage_enabled', FALSE),
 		'optin' => FALSE,
-		'admin-page' => TRUE,
 		'admin-form' => '',
 		'settings' => array(),
 	);
@@ -483,7 +476,6 @@ function tm_sms_tm_sms_features() {
 		'codewords' => array('SIGNUP'),
 		'enabled' => variable_get('tm_sms_feature_signup_enabled', FALSE),
 		'optin' => FALSE,
-		'admin-page' => FALSE,
 		'admin-form' => '',
 		'settings' => array(),
 	);
