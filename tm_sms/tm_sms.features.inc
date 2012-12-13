@@ -242,7 +242,7 @@ function tm_sms_feature_ship_check($form, &$form_state) {
 		// the mobile number and the user ID to send to
 		$data = 'order=' . $order_id . ':phone=' . $mobile_num . ':user=' . $user_id;
 		// store the future send
-		db_query("INSERT INTO {telemo_future_actions} (action_time, recurrence, feature_id, message, major_data) VALUES (%d, 'none', 'ship', '%s', '%s')", $t, $message, $data);
+		db_query("INSERT INTO {telemo_future_actions} (action_time, recurrence, service_id, feature_id, message, major_data) VALUES (%d, 'none', 'sms', 'ship', '%s', '%s')", $t, $message, $data);
 		// if there were two records (one for the user, one for the order), get rid of the order record now
 		if ($id == -$order_id) {
 			db_query("DELETE FROM {telemo_users} WHERE id = %d", -$order_id);
