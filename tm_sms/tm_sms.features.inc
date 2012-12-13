@@ -22,7 +22,7 @@
  * setup to be regularly recurring. The text messages sent
  * are intended to not vary among the recipients.
  */
-function tm_sms_feature_promos($message) { // the 'from_num' and 'data' params are ignored
+function tm_sms_feature_promos($message) {
 
 	// get the info for the sends
 	$signups = _telemo_get_signups_for_feature('sms', 'promos');
@@ -35,7 +35,7 @@ function tm_sms_feature_promos($message) { // the 'from_num' and 'data' params a
 		foreach ($ids_per_api as $ids) {
 			// check for errors; if none, record the details
 			if (is_array($ids)) {
-				db_query("INSERT INTO {telemo_actions} (id, message, timestamp, feature_id) VALUES ('%s', '%s', %d, '%s')", $ids[0], $message, $timestamp, 'promos');
+				db_query("INSERT INTO {telemo_actions} (id, message, timestamp, service_id, feature_id) VALUES ('%s', '%s', %d, 'sms', 'promos')", $ids[0], $message, $timestamp);
 				db_query("INSERT INTO {telemo_action_numbers} (action_id, user_id, number) VALUES ('%s', %d, '%s')", $ids[0], $signup['id'], $num);
 				db_query("UPDATE {telemo_users} SET last_action_time = %d, last_action_event = 'promos' WHERE id = %d", $timestamp, $signup['id']);
 			}
@@ -57,7 +57,7 @@ function tm_sms_feature_promos($message) { // the 'from_num' and 'data' params a
  * name or order number in the message,) nor to be
  * scheduled for broadcast at a future time.
  */
-function tm_sms_feature_info($message) { // the 'from_num' and 'data' params are ignored
+function tm_sms_feature_info($message) {
 
 	// get the info for the sends
 	$signups = _telemo_get_signups_for_feature('sms', 'info');
@@ -70,7 +70,7 @@ function tm_sms_feature_info($message) { // the 'from_num' and 'data' params are
 		foreach ($ids_per_api as $ids) {
 			// check for errors; if none, record the details
 			if (is_array($ids)) {
-				db_query("INSERT INTO {telemo_actions} (id, message, timestamp, feature_id) VALUES ('%s', '%s', %d, '%s')", $ids[0], $message, $timestamp, 'info');
+				db_query("INSERT INTO {telemo_actions} (id, message, timestamp, service_id, feature_id) VALUES ('%s', '%s', %d, 'sms', 'info')", $ids[0], $message, $timestamp);
 				db_query("INSERT INTO {telemo_action_numbers} (action_id, user_id, number) VALUES ('%s', %d, '%s')", $ids[0], $signup['id'], $num);
 				db_query("UPDATE {telemo_users} SET last_action_time = %d, last_action_event = 'info' WHERE id = %d", $timestamp, $signup['id']);
 			}
@@ -86,7 +86,7 @@ function tm_sms_feature_info($message) { // the 'from_num' and 'data' params are
 /**
  * Implements the 'ship' opt-in feature: the user receives an SMS when his order has been 'shipped'.
  */
-function tm_sms_feature_ship($message, $from_num, $data) {
+function tm_sms_feature_ship($message, $data) {
 
 	// extract the info for the send
 	$parts = explode(':', $data); // break into 'order=###', 'phone=###' and 'user=###'
@@ -99,7 +99,7 @@ function tm_sms_feature_ship($message, $from_num, $data) {
 	foreach ($ids_per_api as $ids) {
 		// check for errors; if none, record the details
 		if (is_array($ids)) {
-			db_query("INSERT INTO {telemo_actions} (id, message, timestamp, feature_id, data) VALUES ('%s', '%s', %d, 'ship', '%s')", $ids[0], $message, $timestamp, $data);
+			db_query("INSERT INTO {telemo_actions} (id, message, timestamp, service_id, feature_id, major_data) VALUES ('%s', '%s', %d, 'sms', 'ship', '%s')", $ids[0], $message, $timestamp, $data);
 			db_query("INSERT INTO {telemo_action_numbers} (action_id, user_id, number) VALUES ('%s', %d, '%s')", $ids[0], $user_id, $mobile_num);
 			db_query("UPDATE {telemo_users} SET last_action_time = %d, last_action_event = 'ship' WHERE id = %d", $timestamp, $user_id);
 		}
@@ -117,9 +117,9 @@ function tm_sms_feature_ship_check($form, &$form_state) {
 	if (!variable_get('tm_sms_feature_ship_enabled', FALSE)) {
 		$continue = FALSE;
 	}
-	elseif (variable_get('telemo_debug_mode', FALSE) && !user_access('access administration menu')) {
-		$continue = FALSE;
-	}
+	//elseif (variable_get('telemo_debug_mode', FALSE) && !user_access('access administration menu')) {
+	//	$continue = FALSE;
+	//}
 	
 	// if continuing, we start gathering data
 	if ($continue) {
@@ -423,12 +423,12 @@ function uc_checkout_pane_tm_sms($op, &$arg1, $arg2) {
 
 			// start adding the form elements
 
- 			$contents['tm_sms_user_passthru'] = array(
+ 			$contents['telemo_user_id_passthru'] = array(
  				'#type' => 'hidden',
  				'#value' => $user_id
  			);
 
-    	$contents['tm_sms_optin_mobile_num'] = array(
+    	$contents['telemo_mobile_num'] = array(
 				'#type' => 'textfield',
 				'#title' => t('Mobile number for texting'),
 				'#default_value' => _telemo_display_mobile_num($mobile_num),
