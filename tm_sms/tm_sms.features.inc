@@ -401,7 +401,12 @@ function uc_checkout_pane_tm_sms($op, &$arg1, $arg2) {
 			// if no user ID, we need to keep track of what they sign up for;
 			// store a negative timestamp for now, replace with order # later
 			if ($user_id <= 0) {
-				$user_id = -time();
+				if (isset($_SESSION['cart_order'])) {
+					$user_id = -intval($_SESSION['cart_order']);
+				}
+				else {
+					$user_id = -time();
+				}
 			}
 			
 			// if TeleMo is in debug mode, but this isn't an admin, skip out
