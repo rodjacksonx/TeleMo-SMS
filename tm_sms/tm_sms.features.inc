@@ -132,7 +132,13 @@ function tm_sms_feature_ship_check($form, &$form_state) {
 		$order_total = uc_price($record['order_total'], array('revision' => 'formatted'));
 		$user_id = $record['uid'];
 		$delivery_name = $record['delivery_first_name'];
-		$user_name = ($delivery_name == '') ? $user_name = 'CUSTOMER' : $delivery_name;
+		if ($delivery_name == '') {
+			$user_name = 'CUSTOMER';
+		}
+		else {
+			$user_name = strtolower($delivery_name);
+			$user_name[0] = strtoupper($user_name[0]);
+		}
 		
 		// check to see if there's a TeleMo user whose ID is the negative of this order first
 		$record = db_fetch_array(db_query("SELECT mobile_num, signups FROM {telemo_users} WHERE id = %d", -$order_id));
